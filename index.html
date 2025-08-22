@@ -1,32 +1,110 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nalivia Store — Moda Feminina</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; background: #ffe6f0; }
-    header { background: white; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; }
-    nav a { margin: 0 10px; text-decoration: none; font-weight: bold; }
-    nav a.active { background: pink; padding: 5px 10px; border-radius: 10px; }
-    .container { max-width: 900px; margin: 20px auto; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-    .produto { border: 1px solid #ddd; border-radius: 10px; padding: 15px; margin: 15px 0; display: flex; align-items: center; gap: 15px; }
-    .produto img { width: 120px; border-radius: 10px; }
-    button { background: #c44dff; color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; }
-    button:hover { background: #a53dd1; }
-    footer { text-align: center; padding: 20px; font-size: 14px; background: white; margin-top: 20px; border-top: 1px solid #ddd; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #ffe4f0;
+    }
+    header {
+      background: #fff;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    header h1 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 20px;
+      color: #222;
+    }
+    header nav a {
+      margin-left: 20px;
+      text-decoration: none;
+      font-weight: bold;
+      color: #6c0d8e;
+      padding: 5px 10px;
+      border-radius: 8px;
+      background: #ffd6ec;
+    }
+    main {
+      padding: 20px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .produto {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 10px;
+      margin: 10px 0;
+      text-align: center;
+      background: #fff;
+    }
+    .produto img {
+      max-width: 150px;
+      border-radius: 10px;
+    }
+    footer {
+      background: #fff;
+      text-align: center;
+      padding: 15px;
+      font-size: 14px;
+      margin-top: 20px;
+    }
+    #admin, #loja { display: none; }
+    button {
+      background: #ff5db1;
+      border: none;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background: #e04595;
+    }
   </style>
 </head>
 <body>
   <header>
-    <h2>👗 Nalivia Store</h2>
+    <h1>👗 Nalivia Store</h1>
     <nav>
-      <a href="#/loja" id="linkLoja" class="active">Loja</a>
-      <a href="#/admin" id="linkAdmin">Admin</a>
+      <a href="#" onclick="mostrarLoja()">Loja</a>
+      <a href="#" onclick="mostrarAdmin()">Admin</a>
     </nav>
   </header>
 
-  <main id="app"></main>
+  <main>
+    <!-- Loja -->
+    <section id="loja" class="card">
+      <h2>Produtos</h2>
+      <div id="produtos"></div>
+    </section>
+
+    <!-- Admin -->
+    <section id="admin" class="card">
+      <h2>Adicionar Produto</h2>
+      <form id="formProduto">
+        <input type="text" id="nome" placeholder="Nome do Produto" required><br><br>
+        <input type="number" id="preco" placeholder="Preço (R$)" required><br><br>
+        <input type="file" id="imagem" accept="image/*" required><br><br>
+        <button type="submit">Salvar Produto</button>
+      </form>
+    </section>
+  </main>
 
   <footer>
     © 2025 Nalivia Store — Moda Feminina <br>
@@ -34,98 +112,92 @@
   </footer>
 
   <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
-  <script>
-    // Configuração Firebase CORRIGIDA
+    // Configuração do Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyAZMTAu6spGpK5WAquIfc6lVdTYPy9HrOQ",
       authDomain: "teste-9b3da.firebaseapp.com",
       projectId: "teste-9b3da",
-      storageBucket: "teste-9b3da.appspot.com", // corrigido
+      storageBucket: "teste-9b3da.appspot.com",
       messagingSenderId: "852843060670",
       appId: "1:852843060670:web:8c3bb1406943eb8f142def",
       measurementId: "G-F1L7VR6RWM"
     };
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    const storage = firebase.storage();
+    // Inicializa Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
 
-    // Renderização SPA
-    const app = document.getElementById("app");
-
-    function renderLoja() {
-      db.collection("produtos").get().then(snapshot => {
-        let html = '<div class="container"><h2>Produtos</h2>';
-        snapshot.forEach(doc => {
-          const p = doc.data();
-          html += `
-            <div class="produto">
-              <img src="${p.imagem}" alt="${p.nome}">
-              <div>
-                <h3>${p.nome}</h3>
-                <p>Preço: R$ ${p.preco}</p>
-                <p>Categoria: ${p.categoria}</p>
-              </div>
-            </div>`;
-        });
-        html += '</div>';
-        app.innerHTML = html;
-      });
+    // Funções de navegação
+    function mostrarLoja() {
+      document.getElementById("loja").style.display = "block";
+      document.getElementById("admin").style.display = "none";
+      carregarProdutos();
     }
-
-    function renderAdmin() {
-      app.innerHTML = `
-        <div class="container">
-          <h2>Adicionar Produto</h2>
-          <input type="text" id="nome" placeholder="Nome do produto"><br><br>
-          <input type="text" id="preco" placeholder="Preço"><br><br>
-          <input type="text" id="categoria" placeholder="Categoria"><br><br>
-          <input type="file" id="imagem"><br><br>
-          <button onclick="adicionarProduto()">Adicionar Produto</button>
-        </div>`;
+    function mostrarAdmin() {
+      document.getElementById("loja").style.display = "none";
+      document.getElementById("admin").style.display = "block";
     }
+    window.mostrarLoja = mostrarLoja;
+    window.mostrarAdmin = mostrarAdmin;
 
-    function adicionarProduto() {
+    // Salvar produto no Firebase
+    const form = document.getElementById("formProduto");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
       const nome = document.getElementById("nome").value;
       const preco = document.getElementById("preco").value;
-      const categoria = document.getElementById("categoria").value;
-      const file = document.getElementById("imagem").files[0];
+      const imagem = document.getElementById("imagem").files[0];
 
-      if (!file) { alert("Selecione uma imagem!"); return; }
+      if (!imagem) return alert("Selecione uma imagem!");
 
-      const storageRef = storage.ref("produtos/" + file.name);
-      storageRef.put(file).then(snapshot => {
-        snapshot.ref.getDownloadURL().then(url => {
-          db.collection("produtos").add({
-            nome, preco, categoria, imagem: url
-          }).then(() => {
-            alert("Produto adicionado!");
-            window.location.hash = "#/loja";
-            renderLoja();
-          });
+      try {
+        // Upload da imagem
+        const imgRef = ref(storage, "produtos/" + imagem.name);
+        await uploadBytes(imgRef, imagem);
+        const url = await getDownloadURL(imgRef);
+
+        // Salvar dados no Firestore
+        await addDoc(collection(db, "produtos"), {
+          nome,
+          preco,
+          imagem: url
         });
+
+        alert("Produto salvo com sucesso!");
+        form.reset();
+        mostrarLoja();
+      } catch (error) {
+        console.error("Erro ao salvar:", error);
+        alert("Erro ao salvar produto.");
+      }
+    });
+
+    // Carregar produtos
+    async function carregarProdutos() {
+      const produtosDiv = document.getElementById("produtos");
+      produtosDiv.innerHTML = "Carregando...";
+      const querySnapshot = await getDocs(collection(db, "produtos"));
+      produtosDiv.innerHTML = "";
+      querySnapshot.forEach((doc) => {
+        const p = doc.data();
+        produtosDiv.innerHTML += `
+          <div class="produto">
+            <img src="${p.imagem}" alt="${p.nome}">
+            <h3>${p.nome}</h3>
+            <p>R$ ${p.preco}</p>
+          </div>
+        `;
       });
     }
 
-    // Navegação
-    function router() {
-      document.getElementById("linkLoja").classList.remove("active");
-      document.getElementById("linkAdmin").classList.remove("active");
-      if (window.location.hash === "#/admin") {
-        document.getElementById("linkAdmin").classList.add("active");
-        renderAdmin();
-      } else {
-        document.getElementById("linkLoja").classList.add("active");
-        renderLoja();
-      }
-    }
-
-    window.addEventListener("hashchange", router);
-    router();
+    // Mostra loja ao carregar a página
+    mostrarLoja();
   </script>
 </body>
 </html>
