@@ -1,222 +1,131 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Nalivia Store — Moda Feminina</title>
-<style>
-  :root{
-    --primary:#ec4899;
-    --bg:#fff0f6;
-    --card:#ffffff;
-    --muted:#6b7280;
-    --text:#1f2937;
-    --accent:#a855f7;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;background: linear-gradient(180deg, #fff0f6, #fdf4ff);color:var(--text);}
-  header{position:sticky; top:0; z-index:50; backdrop-filter: blur(8px); background: rgba(255,255,255,0.8); border-bottom:1px solid rgba(0,0,0,.05);}
-  .wrap{max-width:1100px; margin:0 auto; padding:14px 16px;}
-  .row{display:flex; align-items:center; gap:14px; justify-content:space-between}
-  .logo{display:flex; align-items:center; gap:10px; font-weight:800; font-size:1.2rem}
-  .logo img{height:40px; border-radius:8px; max-width:100%;}
-  nav a{color:var(--muted); text-decoration:none; margin:0 8px; padding:8px 12px; border-radius:10px;}
-  nav a.active, nav a:hover{background:rgba(236,72,153,.15); color:var(--primary)}
-  main{min-height:70vh}
-  .banner{margin:24px auto; padding:18px; border-radius:16px; background: linear-gradient(135deg, #fbcfe8, #ddd6fe); box-shadow: 0 10px 40px rgba(0,0,0,.15);}
-  .banner h2{margin:0 0 8px 0}
-  .carousel{display:flex; gap:10px; overflow:hidden}
-  .slide{min-width:100%; background:#fff; border:1px solid rgba(0,0,0,.05); border-radius:14px; padding:18px; text-align:center;}
-  .searchBar{display:flex; gap:10px; margin:16px 0}
-  .searchBar input{width:100%; padding:12px 14px; border-radius:12px; border:1px solid rgba(0,0,0,.1); background:#fff; color:var(--text);}
-  .grid{display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:16px}
-  .card{background: #fff; border:1px solid rgba(0,0,0,.05); border-radius:16px; overflow:hidden; box-shadow: 0 6px 20px rgba(0,0,0,.1); display:flex; flex-direction:column;}
-  .card img{width:100%; height:260px; object-fit:cover; background:#f3f4f6}
-  .card .body{padding:12px 14px; display:flex; flex-direction:column; gap:6px}
-  .price{font-weight:800; color:var(--primary)}
-  .buy{margin-top:6px; padding:10px 12px; border-radius:12px; border:0; cursor:pointer; background:linear-gradient(90deg, var(--primary), var(--accent)); color:white; font-weight:700;}
-  .panel{background:#fff; border:1px solid rgba(0,0,0,.1); border-radius:16px; padding:16px; margin:16px 0}
-  .field{display:flex; gap:10px; margin:8px 0; flex-wrap:wrap;}
-  .field input, .field textarea{flex:1; min-width:120px; padding:10px 12px; border-radius:10px; border:1px solid rgba(0,0,0,.1); background:#fff; color:var(--text);}
-  .btn{padding:10px 14px; border-radius:10px; border:0; cursor:pointer; font-weight:700; background:var(--accent); color:white;}
-  .muted{color:var(--muted); font-size:.92rem}
-  footer{border-top:1px solid rgba(0,0,0,.05); margin-top:30px; background:#fff}
-  .foot{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:16px}
-  .whatsapp{position: fixed; right:18px; bottom:18px; background:#25D366; color:white; font-weight:800; padding:14px 16px; border-radius:999px; text-decoration:none; box-shadow:0 10px 30px rgba(0,0,0,.35)}
-  @media (max-width:640px){ 
-    .foot{flex-direction:column; align-items:flex-start} 
-    .field{flex-direction:column;}
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nalivia Store — Moda Feminina</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background: #ffe6f0; }
+    header { background: white; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; }
+    nav a { margin: 0 10px; text-decoration: none; font-weight: bold; }
+    nav a.active { background: pink; padding: 5px 10px; border-radius: 10px; }
+    .container { max-width: 900px; margin: 20px auto; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .produto { border: 1px solid #ddd; border-radius: 10px; padding: 15px; margin: 15px 0; display: flex; align-items: center; gap: 15px; }
+    .produto img { width: 120px; border-radius: 10px; }
+    button { background: #c44dff; color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; }
+    button:hover { background: #a53dd1; }
+    footer { text-align: center; padding: 20px; font-size: 14px; background: white; margin-top: 20px; border-top: 1px solid #ddd; }
+  </style>
 </head>
 <body>
-<header>
-  <div class="wrap row">
-    <div class="logo"><img src="logoliv.png" alt="Nalivia Store"> Nalivia Store</div>
+  <header>
+    <h2>👗 Nalivia Store</h2>
     <nav>
       <a href="#/loja" id="linkLoja" class="active">Loja</a>
       <a href="#/admin" id="linkAdmin">Admin</a>
     </nav>
-  </div>
-</header>
+  </header>
 
-<main class="wrap">
-  <!-- LOJA -->
-  <section id="lojaSection">
-    <div class="banner">
-      <h2>Novidades em Moda Feminina ✨</h2>
-      <p class="muted">Os vestidos mais lindos, direto da Nalivia Store.</p>
-      <div class="carousel" id="carousel">
-        <div class="slide">Frete grátis em compras acima de R$ 199</div>
-        <div class="slide">Pagamento em até 6x sem juros</div>
-        <div class="slide">Estilo e conforto para todas as ocasiões</div>
-      </div>
-    </div>
+  <main id="app"></main>
 
-    <div class="searchBar">
-      <input id="search" placeholder="Buscar vestidos..." />
-    </div>
+  <footer>
+    © 2025 Nalivia Store — Moda Feminina <br>
+    Site feito em HTML único, moderno e responsivo.
+  </footer>
 
-    <div class="grid" id="productsGrid"></div>
-  </section>
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
 
-  <!-- ADMIN -->
-  <section id="adminSection" style="display:none;">
-    <div class="panel" id="loginPanel">
-      <h3>Login</h3>
-      <div class="field">
-        <input type="password" id="adminPass" placeholder="Senha de admin" />
-      </div>
-      <button class="btn" id="btnLogin">Entrar</button>
-    </div>
+  <script>
+    // Configuração Firebase CORRIGIDA
+    const firebaseConfig = {
+      apiKey: "AIzaSyAZMTAu6spGpK5WAquIfc6lVdTYPy9HrOQ",
+      authDomain: "teste-9b3da.firebaseapp.com",
+      projectId: "teste-9b3da",
+      storageBucket: "teste-9b3da.appspot.com", // corrigido
+      messagingSenderId: "852843060670",
+      appId: "1:852843060670:web:8c3bb1406943eb8f142def",
+      measurementId: "G-F1L7VR6RWM"
+    };
 
-    <div class="panel" id="editorPanel" style="display:none;">
-      <h3>Adicionar Produto</h3>
-      <div class="field">
-        <input type="text" id="productName" placeholder="Nome do produto" />
-        <input type="text" id="productPrice" placeholder="Preço" />
-        <input type="text" id="productCategory" placeholder="Categoria" />
-      </div>
-      <div class="field">
-        <input type="file" id="productImage" />
-      </div>
-      <button class="btn" id="btnAddProduct">Adicionar Produto</button>
-    </div>
-  </section>
-</main>
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const storage = firebase.storage();
 
-<footer>
-  <div class="wrap foot">
-    <div>© 2025 Nalivia Store — Moda Feminina.</div>
-    <div class="muted">Site feito em HTML único, moderno e responsivo.</div>
-  </div>
-</footer>
+    // Renderização SPA
+    const app = document.getElementById("app");
 
-<a class="whatsapp" href="https://wa.me/5577981518721?text=Ol%C3%A1%2C%20vim%20pelo%20site%20e%20quero%20fazer%20um%20pedido" target="_blank">WhatsApp</a>
+    function renderLoja() {
+      db.collection("produtos").get().then(snapshot => {
+        let html = '<div class="container"><h2>Produtos</h2>';
+        snapshot.forEach(doc => {
+          const p = doc.data();
+          html += `
+            <div class="produto">
+              <img src="${p.imagem}" alt="${p.nome}">
+              <div>
+                <h3>${p.nome}</h3>
+                <p>Preço: R$ ${p.preco}</p>
+                <p>Categoria: ${p.categoria}</p>
+              </div>
+            </div>`;
+        });
+        html += '</div>';
+        app.innerHTML = html;
+      });
+    }
 
-<!-- Firebase compatível -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyAZMTAu6spGpK5WAquIfc6lVdTYPy9HrOQ",
-    authDomain: "teste-9b3da.firebaseapp.com",
-    projectId: "teste-9b3da",
-    storageBucket: "teste-9b3da.firebasestorage.app",
-    messagingSenderId: "852843060670",
-    appId: "1:852843060670:web:8c3bb1406943eb8f142def",
-    measurementId: "G-F1L7VR6RWM"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-  const storage = firebase.storage();
-
-  // Navegação
-  function updateNav(){
-    const hash = location.hash || "#/loja";
-    document.getElementById('linkLoja').classList.toggle('active', hash === "#/loja");
-    document.getElementById('linkAdmin').classList.toggle('active', hash === "#/admin");
-    document.getElementById('lojaSection').style.display = (hash === "#/loja") ? "" : "none";
-    document.getElementById('adminSection').style.display = (hash === "#/admin") ? "" : "none";
-  }
-  window.addEventListener('hashchange', updateNav);
-  updateNav();
-
-  // Carousel
-  (function carousel(){
-    const el = document.getElementById('carousel');
-    let idx = 0;
-    setInterval(()=>{ idx = (idx+1) % el.children.length; el.scrollTo({ left: el.clientWidth * idx, behavior: 'smooth' }); }, 3000);
-  })();
-
-  // Login ADMIN
-  const PASS = "15390640";
-  const btnLogin = document.getElementById('btnLogin');
-  btnLogin.addEventListener('click', ()=>{
-    const v = document.getElementById('adminPass').value;
-    if(v===PASS){
-      document.getElementById('loginPanel').style.display="none";
-      document.getElementById('editorPanel').style.display="";
-    }else alert("Senha incorreta!");
-  });
-
-  // Adicionar produto
-  const btnAdd = document.getElementById('btnAddProduct');
-  btnAdd.addEventListener('click', async ()=>{
-    const name = document.getElementById('productName').value;
-    const price = document.getElementById('productPrice').value;
-    const category = document.getElementById('productCategory').value;
-    const file = document.getElementById('productImage').files[0];
-    if(!name || !price || !file){ alert("Preencha todos os campos"); return; }
-
-    const storageRef = storage.ref('produtos/'+file.name);
-    await storageRef.put(file);
-    const imageUrl = await storageRef.getDownloadURL();
-
-    await db.collection('products').add({name, price, category, image:imageUrl});
-    alert("Produto adicionado!");
-
-    document.getElementById('productName').value="";
-    document.getElementById('productPrice').value="";
-    document.getElementById('productCategory').value="";
-    document.getElementById('productImage').value="";
-
-    renderProducts();
-  });
-
-  // Renderizar produtos
-  async function renderProducts(term=""){
-    const snapshot = await db.collection('products').get();
-    let products = snapshot.docs.map(doc=>doc.data());
-    if(term) products = products.filter(p=>(p.name+" "+p.category).toLowerCase().includes(term.toLowerCase()));
-    const grid = document.getElementById('productsGrid');
-    grid.innerHTML="";
-    products.forEach(p=>{
-      const card = document.createElement('div');
-      card.className='card';
-      card.innerHTML=`
-        <img src="${p.image}" alt="${p.name}" />
-        <div class="body">
-          <strong>${p.name}</strong>
-          <span class="muted">${p.category}</span>
-          <span class="price">R$ ${p.price}</span>
-          <button class="buy" onclick="comprar('${p.name}')">Comprar</button>
+    function renderAdmin() {
+      app.innerHTML = `
+        <div class="container">
+          <h2>Adicionar Produto</h2>
+          <input type="text" id="nome" placeholder="Nome do produto"><br><br>
+          <input type="text" id="preco" placeholder="Preço"><br><br>
+          <input type="text" id="categoria" placeholder="Categoria"><br><br>
+          <input type="file" id="imagem"><br><br>
+          <button onclick="adicionarProduto()">Adicionar Produto</button>
         </div>`;
-      grid.appendChild(card);
-    });
-  }
+    }
 
-  renderProducts();
+    function adicionarProduto() {
+      const nome = document.getElementById("nome").value;
+      const preco = document.getElementById("preco").value;
+      const categoria = document.getElementById("categoria").value;
+      const file = document.getElementById("imagem").files[0];
 
-  // Busca
-  document.getElementById('search').addEventListener('input', e=>renderProducts(e.target.value));
+      if (!file) { alert("Selecione uma imagem!"); return; }
 
-  // WhatsApp
-  function comprar(nome){
-    window.open('https://wa.me/5577981518721?text='+encodeURIComponent("Olá, vim pelo site e quero fazer um pedido: "+nome),'_blank');
-  }
-</script>
+      const storageRef = storage.ref("produtos/" + file.name);
+      storageRef.put(file).then(snapshot => {
+        snapshot.ref.getDownloadURL().then(url => {
+          db.collection("produtos").add({
+            nome, preco, categoria, imagem: url
+          }).then(() => {
+            alert("Produto adicionado!");
+            window.location.hash = "#/loja";
+            renderLoja();
+          });
+        });
+      });
+    }
+
+    // Navegação
+    function router() {
+      document.getElementById("linkLoja").classList.remove("active");
+      document.getElementById("linkAdmin").classList.remove("active");
+      if (window.location.hash === "#/admin") {
+        document.getElementById("linkAdmin").classList.add("active");
+        renderAdmin();
+      } else {
+        document.getElementById("linkLoja").classList.add("active");
+        renderLoja();
+      }
+    }
+
+    window.addEventListener("hashchange", router);
+    router();
+  </script>
 </body>
 </html>
