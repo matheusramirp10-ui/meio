@@ -1,203 +1,97 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nalivia Store — Moda Feminina</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #ffe4f0;
-    }
-    header {
-      background: #fff;
-      padding: 15px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    header h1 {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 20px;
-      color: #222;
-    }
-    header nav a {
-      margin-left: 20px;
-      text-decoration: none;
-      font-weight: bold;
-      color: #6c0d8e;
-      padding: 5px 10px;
-      border-radius: 8px;
-      background: #ffd6ec;
-    }
-    main {
-      padding: 20px;
-    }
-    .card {
-      background: #fff;
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-    .produto {
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 10px;
-      margin: 10px 0;
-      text-align: center;
-      background: #fff;
-    }
-    .produto img {
-      max-width: 150px;
-      border-radius: 10px;
-    }
-    footer {
-      background: #fff;
-      text-align: center;
-      padding: 15px;
-      font-size: 14px;
-      margin-top: 20px;
-    }
-    #admin, #loja { display: none; }
-    button {
-      background: #ff5db1;
-      border: none;
-      color: white;
-      padding: 10px 15px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    button:hover {
-      background: #e04595;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>👗 Nalivia Store</h1>
-    <nav>
-      <a href="#" onclick="mostrarLoja()">Loja</a>
-      <a href="#" onclick="mostrarAdmin()">Admin</a>
-    </nav>
-  </header>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-app.js";
+  import { getFirestore, collection, getDocs, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-firestore.js";
 
-  <main>
-    <!-- Loja -->
-    <section id="loja" class="card">
-      <h2>Produtos</h2>
-      <div id="produtos"></div>
-    </section>
+  // Configuração do Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyD04B5H_7chnjwiiFgk-f_tKh7MZFJaho0",
+    authDomain: "analivia-cb075.firebaseapp.com",
+    projectId: "analivia-cb075",
+    storageBucket: "analivia-cb075.appspot.com",
+    messagingSenderId: "979185575456",
+    appId: "1:979185575456:web:5f65bf9ea75b4a7b3c3e45"
+  };
 
-    <!-- Admin -->
-    <section id="admin" class="card">
-      <h2>Adicionar Produto</h2>
-      <form id="formProduto">
-        <input type="text" id="nome" placeholder="Nome do Produto" required><br><br>
-        <input type="number" id="preco" placeholder="Preço (R$)" required><br><br>
-        <input type="file" id="imagem" accept="image/*" required><br><br>
-        <button type="submit">Salvar Produto</button>
-      </form>
-    </section>
-  </main>
+  // Inicializa Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-  <footer>
-    © 2025 Nalivia Store — Moda Feminina <br>
-    Site feito em HTML único, moderno e responsivo.
-  </footer>
+  // --- Seus produtos iniciais locais ---
+  let products = [
+    { name: "Vestido Vermelho Elegante", price: "179,90", image: "vestido1.jpg", category:"Vestidos Femininos" },
+    { name: "Vestido Floral Rosa", price: "189,90", image: "vestido2.jpg", category:"Vestidos Femininos" },
+    { name: "Vestido Verde Poá", price: "169,90", image: "vestido3.jpg", category:"Vestidos Femininos" }
+  ];
 
-  <!-- Firebase -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
-
-    // Configuração do Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyAZMTAu6spGpK5WAquIfc6lVdTYPy9HrOQ",
-      authDomain: "teste-9b3da.firebaseapp.com",
-      projectId: "teste-9b3da",
-      storageBucket: "teste-9b3da.appspot.com",
-      messagingSenderId: "852843060670",
-      appId: "1:852843060670:web:8c3bb1406943eb8f142def",
-      measurementId: "G-F1L7VR6RWM"
-    };
-
-    // Inicializa Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const storage = getStorage(app);
-
-    // Funções de navegação
-    function mostrarLoja() {
-      document.getElementById("loja").style.display = "block";
-      document.getElementById("admin").style.display = "none";
-      carregarProdutos();
-    }
-    function mostrarAdmin() {
-      document.getElementById("loja").style.display = "none";
-      document.getElementById("admin").style.display = "block";
-    }
-    window.mostrarLoja = mostrarLoja;
-    window.mostrarAdmin = mostrarAdmin;
-
-    // Salvar produto no Firebase
-    const form = document.getElementById("formProduto");
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const nome = document.getElementById("nome").value;
-      const preco = document.getElementById("preco").value;
-      const imagem = document.getElementById("imagem").files[0];
-
-      if (!imagem) return alert("Selecione uma imagem!");
-
-      try {
-        // Upload da imagem
-        const imgRef = ref(storage, "produtos/" + imagem.name);
-        await uploadBytes(imgRef, imagem);
-        const url = await getDownloadURL(imgRef);
-
-        // Salvar dados no Firestore
-        await addDoc(collection(db, "produtos"), {
-          nome,
-          preco,
-          imagem: url
-        });
-
-        alert("Produto salvo com sucesso!");
-        form.reset();
-        mostrarLoja();
-      } catch (error) {
-        console.error("Erro ao salvar:", error);
-        alert("Erro ao salvar produto.");
-      }
+  // --- Função para renderizar produtos (sua existente) ---
+  function render(productsToShow){
+    const grid = document.getElementById('productsGrid');
+    grid.innerHTML = "";
+    productsToShow.forEach(p => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <img src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/400x400.png?text=Imagem+Indisponível'"/>
+        <div class="body">
+          <strong>${p.name}</strong>
+          <span class="muted">${p.category}</span>
+          <span class="price">R$ ${p.price}</span>
+          <button class="buy" onclick="comprar('${p.name}')">Comprar</button>
+        </div>
+      `;
+      grid.appendChild(card);
     });
+  }
 
-    // Carregar produtos
-    async function carregarProdutos() {
-      const produtosDiv = document.getElementById("produtos");
-      produtosDiv.innerHTML = "Carregando...";
-      const querySnapshot = await getDocs(collection(db, "produtos"));
-      produtosDiv.innerHTML = "";
-      querySnapshot.forEach((doc) => {
-        const p = doc.data();
-        produtosDiv.innerHTML += `
-          <div class="produto">
-            <img src="${p.imagem}" alt="${p.nome}">
-            <h3>${p.nome}</h3>
-            <p>R$ ${p.preco}</p>
-          </div>
-        `;
-      });
+  render(products);
+
+  // --- Comprar via WhatsApp ---
+  function comprar(nome){
+    window.open('https://wa.me/5577981518721?text=' + encodeURIComponent("Olá, vim pelo site e quero fazer um pedido: " + nome), '_blank');
+  }
+
+  // --- Admin ---
+  const PASS = "15390640";
+  const btnLogin = document.getElementById('btnLogin');
+  btnLogin.addEventListener('click', () => {
+    const v = document.getElementById('adminPass').value;
+    if(v === PASS){
+      document.getElementById('loginPanel').style.display = "none";
+      document.getElementById('editorPanel').style.display = "";
+      document.getElementById('jsonArea').value = JSON.stringify(products, null, 2);
+    }else{
+      alert("Senha incorreta!");
     }
+  });
 
-    // Mostra loja ao carregar a página
-    mostrarLoja();
-  </script>
-</body>
-</html>
+  // --- Aplicar alterações no Firebase ---
+  document.getElementById('btnAplicar').addEventListener('click', async ()=>{
+    try{
+      const parsed = JSON.parse(document.getElementById('jsonArea').value);
+      if(!Array.isArray(parsed)) throw new Error("O JSON deve ser um array.");
+      products = parsed;
+      render(products);
+
+      // Enviar produtos para Firebase
+      for(const [idx, p] of products.entries()){
+        await setDoc(doc(db, "products", "product" + idx), p); 
+        // Cada produto recebe um ID: product0, product1...
+      }
+
+      alert("Alterações aplicadas e salvas no Firebase.");
+    }catch(err){
+      alert("Erro no JSON ou Firebase: " + err.message);
+    }
+  });
+
+  // --- Baixar JSON (mantido) ---
+  document.getElementById('btnBaixar').addEventListener('click', ()=>{
+    const blob = new Blob([document.getElementById('jsonArea').value], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = "products.json";
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+</script>
